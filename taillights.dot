@@ -1,0 +1,40 @@
+digraph finite_state_machine {
+  rankdir=LR;
+  node [shape = doublecircle]; STATE_OFF;
+  node [shape = circle];
+  STATE_FULL -> STATE_OFF [ label = "hazard or (left and right)" ];
+  STATE_LEFT_A -> STATE_FULL [ label = "hazard or (left and right)" ];
+  STATE_LEFT_B -> STATE_FULL [ label = "hazard or (left and right)" ];
+  STATE_LEFT_C -> STATE_FULL [ label = "hazard or (left and right)" ];
+  STATE_RIGHT_A -> STATE_FULL [ label = "hazard or (left and right)" ];
+  STATE_RIGHT_B -> STATE_FULL [ label = "hazard or (left and right)" ];
+  STATE_RIGHT_C -> STATE_FULL [ label = "hazard or (left and right)" ];
+  STATE_OFF -> STATE_FULL [ label = "hazard or (left and right)" ];
+
+  STATE_FULL -> STATE_LEFT_A [ label = "left and !right" ];
+  STATE_LEFT_A -> STATE_LEFT_B [ label = "left and !right" ];
+  STATE_LEFT_B -> STATE_LEFT_C [ label = "left and !right" ];
+  STATE_LEFT_C -> STATE_OFF [ label = "left and !right" ];
+  STATE_RIGHT_A -> STATE_LEFT_A [ label = "left and !right" ];
+  STATE_RIGHT_B -> STATE_LEFT_A [ label = "left and !right" ];
+  STATE_RIGHT_C -> STATE_LEFT_A [ label = "left and !right" ];
+  STATE_OFF -> STATE_LEFT_A [ label = "left and !right" ];
+
+  STATE_FULL -> STATE_RIGHT_A [ label = "!left and right" ];
+  STATE_LEFT_A -> STATE_RIGHT_A [ label = "!left and right" ];
+  STATE_LEFT_B -> STATE_RIGHT_A [ label = "!left and right" ];
+  STATE_LEFT_C -> STATE_RIGHT_A [ label = "!left and right" ];
+  STATE_RIGHT_A -> STATE_RIGHT_B [ label = "!left and right" ];
+  STATE_RIGHT_B -> STATE_RIGHT_C [ label = "!left and right" ];
+  STATE_RIGHT_C -> STATE_OFF [ label = "!left and right" ];
+  STATE_OFF -> STATE_RIGHT_A [ label = "!left and right" ];
+
+    STATE_FULL -> STATE_OFF [ label = "!left and !right and !hazard" ];
+  STATE_LEFT_A -> STATE_OFF [ label = "!left and !right and !hazard" ];
+  STATE_LEFT_B -> STATE_OFF [ label = "!left and !right and !hazard" ];
+  STATE_LEFT_C -> STATE_OFF [ label = "!left and !right and !hazard" ];
+  STATE_RIGHT_A -> STATE_OFF [ label = "!left and !right and !hazard" ];
+  STATE_RIGHT_B -> STATE_OFF [ label = "!left and !right and !hazard" ];
+  STATE_RIGHT_C -> STATE_OFF [ label = "!left and !right and !hazard" ];
+  STATE_OFF -> STATE_OFF [ label = "!left and !right and !hazard" ];
+}
