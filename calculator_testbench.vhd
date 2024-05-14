@@ -2,14 +2,35 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
 
-entity calculator_tb is
-end calculator_tb;
+entity CalculatorTestbench is
+end CalculatorTestbench;
 
-architecture Behavioral of calculator_tb is
+architecture Behavioral of CalculatorTestbench is
+  component Calculator is
+    port
+    (
+      clk     : in std_logic;
+      uart_rx : in std_logic;
+      uart_tx : out std_logic);
+  end component;
+
+  component uart is
+    port
+    (
+      clk        : in std_logic;
+      reset      : in std_logic;
+      data_in    : in std_logic_vector(7 downto 0);
+      tx_enable  : in std_logic;
+      tx_idle    : out std_logic;
+      tx_out     : out std_logic;
+      data_out   : out std_logic_vector(7 downto 0);
+      data_valid : out std_logic;
+      rx_in      : in std_logic);
+  end component;
+
   constant frequency : integer := 12000000;
-  constant period    : time    := 1 sec / frequency; -- Full period
+  constant period    : time    := 1 sec / frequency;
 
-  -- Procedure for clock generation
   procedure generate_clock(signal clk : out std_logic) is
   begin
     loop
@@ -20,6 +41,7 @@ architecture Behavioral of calculator_tb is
     end loop;
   end procedure;
 
+  -- Procedure to verify that the calculator returns the expected result for a mathematical operation
   procedure test_operation(
     signal data_to_dut       : out std_logic_vector(7 downto 0);
     signal tx_enable         : out std_logic;
@@ -110,41 +132,15 @@ architecture Behavioral of calculator_tb is
     assert (data_from_dut = expected_result_vec(7 downto 0)) report "8th byte of the result is wrong" severity FAILURE;
 
   end procedure;
-
-  component CMODA7Framework is
-    port
-    (
-      CLK     : in std_logic;
-      UART_RX : in std_logic;
-      UART_TX : out std_logic);
-  end component;
-
-  -- The UART thing wants to be reset at the start, it will do goofy things otherwise
-  component uart is
-    port
-    (
-      CLK        : in std_logic;
-      RESET      : in std_logic;
-      DATA_IN    : in std_logic_vector(7 downto 0);
-      TX_ENABLE  : in std_logic;
-      TX_IDLE    : out std_logic;
-      TX_OUT     : out std_logic;
-      DATA_OUT   : out std_logic_vector(7 downto 0);
-      DATA_VALID : out std_logic;
-      RX_IN      : in std_logic);
-  end component;
-
   -- Connections to dut
   signal clock   : std_logic;
   signal uart_rx : std_logic;
   signal uart_tx : std_logic;
 
-  --UART inputs
-  signal uart_reset  : std_logic;
-  signal data_to_dut : std_logic_vector(7 downto 0);
-  signal tx_enable   : std_logic;
-
-  --UART outputs
+  --UART connections
+  signal uart_reset    : std_logic;
+  signal data_to_dut   : std_logic_vector(7 downto 0);
+  signal tx_enable     : std_logic;
   signal tx_idle       : std_logic;
   signal data_from_dut : std_logic_vector(7 downto 0);
   signal data_valid    : std_logic;
@@ -163,7 +159,7 @@ begin
     rx_in      => uart_rx
   );
 
-  dut : CMODA7Framework port
+  dut : Calculator port
   map (clock, uart_tx, uart_rx);
 
   clock_proc : process
