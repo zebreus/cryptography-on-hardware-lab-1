@@ -1,0 +1,12 @@
+digraph finite_state_machine {
+  rankdir=LR;
+  node [shape = doublecircle]; S_RESET;
+  node [shape = circle];
+  S_RESET -> S_IDLE [  ];
+  S_IDLE -> S_RECEIVE_INPUT [  ];
+  S_RECEIVE_INPUT -> S_PROCESS [ label = "DATA_VALID = '1'"  ];
+  S_RECEIVE_INPUT -> S_RECEIVE_INPUT [ ];
+  S_PROCESS -> S_SEND_OUTPUT [ ];
+  S_SEND_OUTPUT -> S_IDLE [ label = "TX_IDLE = '1'" ];
+  S_SEND_OUTPUT -> S_SEND_OUTPUT [ ];
+}
