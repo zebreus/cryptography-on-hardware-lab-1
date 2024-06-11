@@ -26,6 +26,7 @@
               ]))
             pkgs.ghdl
             pkgs.verilator
+            pkgs.verible
           ];
         };
       }
